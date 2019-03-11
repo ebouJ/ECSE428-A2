@@ -1,5 +1,6 @@
 package A2;
 
+import java.awt.AWTException;
 import java.awt.Robot;
 
 import java.awt.Toolkit;
@@ -18,25 +19,48 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 
 public class Assignment2 {
-
+	private static WebDriver driver;
+    private final static String RECIPIENT = "parkability@gmail.com";
+    private final static String PASSWORD = "";
+    private final static String RECIPIENTS = "ebou.jobe@mail.mcgill.ca, test@gmail.com";
+    private final static String THREE_RECIPIENTS = "ebou.jobe@mail.mcgill.ca,test@gmail.com, test1@gmail.com";
+    private final static String ATTACHMENT = "/Users/mac/Desktop/PrintDocs.pdf";
+    private final static String ATTACHMENT1 = "/Users/mac/Desktop/EbouJobeCV.pdf";
+    private final static String ATTACHMENT2 = "/Users/mac/Desktop/EbouJobeCV.pdf";
 	public static void main(String[] args) throws Throwable {
 		// TODO Auto-generated method stub
-
+		
+		sent(ATTACHMENT,RECIPIENT);
+		
+		sent(ATTACHMENT1,RECIPIENTS);
+		
+		sent(ATTACHMENT,RECIPIENTS);
+		
+		sent(ATTACHMENT1,RECIPIENT);
+		
+		
+		sent(ATTACHMENT,THREE_RECIPIENTS);
+	
+	}
+	
+	
+	private static void sent(String att, String recp) throws InterruptedException, AWTException {
 		System.setProperty("webdriver.chrome.driver", "/Users/mac/Downloads/chromedriver");
+		driver = new ChromeDriver();
 
-		WebDriver driver = new ChromeDriver();
+		
 		driver.get("http://www.gmail.com");
 
-		driver.findElement(By.xpath("//input[@aria-label='Email or phone']")).sendKeys("");
+		driver.findElement(By.xpath("//input[@aria-label='Email or phone']")).sendKeys("eboujobe44");
 		driver.findElement(By.xpath("//span[.='Next']")).click();
-		sleep(1000);
+		sleep(3000);
 
-		driver.findElement(By.xpath("//input[@aria-label='Enter your password']")).sendKeys("");
+		driver.findElement(By.xpath("//input[@aria-label='Enter your password']")).sendKeys(PASSWORD);
 		driver.findElement(By.xpath("//span[.='Next']")).click();
-		sleep(5000);
+		sleep(6000);
 		driver.findElement(By.xpath("//*[@role='button' and text()='Compose']")).click();
-
-		driver.findElement(By.xpath("//textarea[@name='to']")).sendKeys("parkability@gmail.com");
+		sleep(2000);
+		driver.findElement(By.xpath("//textarea[@name='to']")).sendKeys(recp);
 		driver.findElement(By.xpath("//input[@name='subjectbox']")).sendKeys("selenium test");
 		
 		driver.findElement(By.xpath("//div[@class='a1 aaA aMZ']")).click();
@@ -44,7 +68,7 @@ public class Assignment2 {
 		 
 		//File Need to be imported
 		 
-		File file = new File("/Users/mac/Desktop/EbouJobeCV.pdf");
+		File file = new File(att);
 		 
 		StringSelection stringSelection= new StringSelection(file.getAbsolutePath());
 		 
@@ -107,14 +131,14 @@ public class Assignment2 {
 		
 		
 		
-		sleep(5000);
+		sleep(10000);
 		
 		driver.findElement(By.xpath("//*[@role='button' and text()='Send']")).click();
 		
 		
 		
 		confirmSent(driver);
-	
+		finish();
 	}
 	
 	
@@ -135,6 +159,10 @@ public class Assignment2 {
 	        if (messageSent != null) {
 	        	System.out.println("confirm: email sent");
 	        }
+	}
+	private static void finish() {
+		driver.manage().deleteAllCookies();
+		driver.quit();
 	}
 
 
